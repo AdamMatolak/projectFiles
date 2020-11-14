@@ -1,39 +1,52 @@
 package sk.kosickaakademia.matolak.files;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
+import java.nio.file.Files;
 
 public class RWFile {
-    public void copyFileWithCapital(String fileName) {
+    public void copyFileWithCapital(String fileName){
         BufferedReader reader;
-        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         try {
-            FileReader fr= new FileReader(fileName);
-            File file = new File(getFileName());
+            if(new File(fileName).exists()==false){
+                System.out.println("Problem : File "+fileName+" does not exist !");
+                return;
+            }
+            FileReader fr = new FileReader(fileName);
+
+            File file = new File("output/"+getFileName('b'));
             file.createNewFile();
-            FileWriter fw = new FileWriter(getFileName());
+
+            FileWriter fw = new FileWriter( file );
+
             reader=new BufferedReader(fr);
             String line;
-            while ((line=reader.readLine())!=null){
+            while((line=reader.readLine())!=null){
                 line=line.toUpperCase();
                 System.out.println(line);
-                fw.write(line+'\n');
+                fw.write(line+"\n");
             }
+
             fr.close();
-        }catch (IOException ex){
+            fw.close();
+        }catch(IOException ex){
             ex.printStackTrace();
         }
 
     }
 
-    private String getFileName(){
+    private String getFileName(char prefix){
         String name;
-        name="b_.txt";
+        //zmena, vygenerovat spravny nazov
+        name=prefix+"_221054.txt";
         return name;
 
+    }
 
+    public void copyAndEncryptFile(String fileName){
+        // c_hhmmss
+
+        // Ahoj   + 3 znaky
+        // koduju sa len pismena a cislice ( z->c, 7->0, Y->B, !->! #->#
+        // vstup-> line -> char[] -> zmena/posun -> string -> zapis
     }
 }
